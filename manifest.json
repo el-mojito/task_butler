@@ -1,0 +1,8 @@
+{
+  "domain": "task_butler",
+  "name": "My Task Butler",
+  "version": "0.1.0",
+  "requirements": [],
+  "codeowners": ["@el-mojito"],
+  "iot_class": "local_polling"
+}
