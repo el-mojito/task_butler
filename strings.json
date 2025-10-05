@@ -1,0 +1,37 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Add Task Butler Task",
+        "description": "Set up a new recurring task.",
+        "data": {
+          "task_name": "Task Name",
+          "interval_days": "Interval (Days)",
+          "schedule_type": "Schedule Type",
+          "enabled": "Enabled"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect",
+      "invalid_auth": "Invalid authentication",
+      "unknown": "Unexpected error"
+    },
+    "abort": {
+      "already_configured": "Task is already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Task Butler Options",
+        "description": "Configure task options.",
+        "data": {
+          "interval_days": "Interval (Days)",
+          "schedule_type": "Schedule Type",
+          "enabled": "Enabled"
+        }
+      }
+    }
+  }
+}

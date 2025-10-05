@@ -1,0 +1,57 @@
+mark_task_complete:
+  name: Mark Task Complete
+  description: Mark a task as completed
+  fields:
+    entity_id:
+      name: Entity
+      description: The task entity to mark as complete
+      required: true
+      selector:
+        entity:
+          domain: binary_sensor
+          integration: task_butler
+
+reset_task:
+  name: Reset Task
+  description: Reset a task's schedule
+  fields:
+    entity_id:
+      name: Entity
+      description: The task entity to reset
+      required: true
+      selector:
+        entity:
+          domain: binary_sensor
+          integration: task_butler
+
+add_task:
+  name: Add Task
+  description: Add a new task
+  fields:
+    name:
+      name: Task Name
+      description: Name of the task
+      required: true
+      selector:
+        text:
+    interval_days:
+      name: Interval (Days)
+      description: Number of days between task occurrences
+      required: true
+      default: 30
+      selector:
+        number:
+          min: 1
+          max: 365
+    schedule_type:
+      name: Schedule Type
+      description: How the task schedule behaves
+      required: true
+      default: "fixed"
+      selector:
+        select:
+          options:
+            - label: "Fixed Interval"
+              value: "fixed"
+            - label: "Completion Based"
+              value: "completion_based"

@@ -1,0 +1,43 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Add Task Butler Task",
+        "description": "Set up a new recurring task to track maintenance activities.",
+        "data": {
+          "task_name": "Task Name",
+          "interval_days": "Interval (Days)",
+          "schedule_type": "Schedule Type",
+          "enabled": "Enabled"
+        },
+        "data_description": {
+          "task_name": "The name of the recurring task (e.g., 'Clean Water Filter')",
+          "interval_days": "How many days between task occurrences",
+          "schedule_type": "Fixed: repeats every X days regardless of completion. Completion-based: starts counting after task is marked complete.",
+          "enabled": "Whether this task is currently active"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect",
+      "invalid_auth": "Invalid authentication",
+      "unknown": "Unexpected error occurred"
+    },
+    "abort": {
+      "already_configured": "Task with this name is already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Task Butler Options",
+        "description": "Configure options for this task.",
+        "data": {
+          "interval_days": "Interval (Days)",
+          "schedule_type": "Schedule Type",
+          "enabled": "Enabled"
+        }
+      }
+    }
+  }
+}
