@@ -28,17 +28,12 @@ async def async_setup_entry(
     """Set up Task Butler binary sensor based on a config entry."""
     coordinator: TaskButlerCoordinator = hass.data[DOMAIN]
 
-    @coordinator.async_add_listener
-    def _add_entities():
-        """Add entities when tasks are created."""
-        entities = []
-        for task_id in coordinator.tasks:
-            entities.append(TaskDueBinarySensor(coordinator, task_id))
-        if entities:
-            async_add_entities(entities, True)
+    # Create binary sensors for all tasks
+    entities = []
+    for task_id in coordinator.tasks:
+        entities.append(TaskDueBinarySensor(coordinator, task_id))
 
-    # Add initial entities
-    _add_entities()
+    async_add_entities(entities, True)
 
 
 class TaskDueBinarySensor(CoordinatorEntity, BinarySensorEntity):

@@ -13,12 +13,9 @@
       }
     },
     "error": {
-      "cannot_connect": "Failed to connect",
-      "invalid_auth": "Invalid authentication",
       "unknown": "Unexpected error occurred"
     },
     "abort": {
-      "already_configured": "Task Butler is already configured",
       "single_instance_allowed": "Only a single instance of Task Butler is allowed"
     }
   },

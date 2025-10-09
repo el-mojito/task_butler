@@ -50,16 +50,6 @@ create_task:
               label: Hard Fixed
             - value: after_completion
               label: After Completion
-    fixed_date:
-      name: Fixed Date
-      description: Fixed date for scheduling (MM-DD format)
-      selector:
-        text:
-    fixed_occurrence:
-      name: Fixed Occurrence
-      description: Fixed occurrence description
-      selector:
-        text:
     enabled:
       name: Enabled
       description: Whether the task is enabled
@@ -91,46 +81,6 @@ update_task:
     name:
       name: Task Name
       description: New name of the task
-      selector:
-        text:
-    schedule_mode:
-      name: Schedule Mode
-      description: How the task is scheduled
-      selector:
-        select:
-          options:
-            - value: fixed_date
-              label: Fixed Date
-            - value: fixed_occurrence
-              label: Fixed Occurrence
-            - value: fixed_interval
-              label: Fixed Interval
-    interval_days:
-      name: Interval Days
-      description: Number of days for interval scheduling
-      selector:
-        number:
-          min: 1
-          max: 365
-          unit_of_measurement: days
-    interval_mode:
-      name: Interval Mode
-      description: How the interval is calculated
-      selector:
-        select:
-          options:
-            - value: hard_fixed
-              label: Hard Fixed
-            - value: after_completion
-              label: After Completion
-    fixed_date:
-      name: Fixed Date
-      description: Fixed date for scheduling (MM-DD format)
-      selector:
-        text:
-    fixed_occurrence:
-      name: Fixed Occurrence
-      description: Fixed occurrence description
       selector:
         text:
     enabled:

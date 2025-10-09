@@ -2,24 +2,24 @@
 
 from __future__ import annotations
 
-import logging
-import uuid
 from datetime import datetime, timedelta
+import logging
 from typing import Any
+import uuid
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers.storage import Store
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.helpers.storage import Store
 
 from .const import (
-    DEFAULT_DATE_FORMAT,
     DOMAIN,
-    INTERVAL_AFTER_COMPLETION,
-    INTERVAL_HARD_FIXED,
     SCHEDULE_FIXED_DATE,
-    SCHEDULE_FIXED_INTERVAL,
     SCHEDULE_FIXED_OCCURRENCE,
+    SCHEDULE_FIXED_INTERVAL,
+    INTERVAL_HARD_FIXED,
+    INTERVAL_AFTER_COMPLETION,
+    DEFAULT_DATE_FORMAT,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -29,7 +29,7 @@ STORAGE_KEY = f"{DOMAIN}_tasks"
 
 
 class TaskButlerCoordinator(DataUpdateCoordinator):
-    """Class to manage fetching Task Butler data."""
+    """Task Butler data coordinator."""
 
     def __init__(self, hass: HomeAssistant, entry: ConfigEntry) -> None:
         """Initialize Task Butler coordinator."""
@@ -44,7 +44,7 @@ class TaskButlerCoordinator(DataUpdateCoordinator):
         self.tasks: dict[str, dict[str, Any]] = {}
 
     async def _async_update_data(self) -> dict[str, Any]:
-        """Update data via library."""
+        """Update data."""
         try:
             # Load tasks from storage if not already loaded
             if not self.tasks:
@@ -52,7 +52,7 @@ class TaskButlerCoordinator(DataUpdateCoordinator):
                 if stored_data:
                     self.tasks = stored_data.get("tasks", {})
 
-            # Update task states (check if tasks are due)
+            # Update task states
             current_time = datetime.now()
             for task_id, task in self.tasks.items():
                 task["is_due"] = self._is_task_due(task, current_time)
@@ -60,7 +60,7 @@ class TaskButlerCoordinator(DataUpdateCoordinator):
 
             return self.tasks
         except Exception as err:
-            raise UpdateFailed(f"Error communicating with API: {err}") from err
+            raise UpdateFailed(f"Error updating Task Butler data: {err}") from err
 
     def _is_task_due(self, task: dict[str, Any], current_time: datetime) -> bool:
         """Check if a task is currently due."""
@@ -88,20 +88,11 @@ class TaskButlerCoordinator(DataUpdateCoordinator):
                 if isinstance(last_completed, str):
                     last_completed = datetime.fromisoformat(last_completed)
                 return last_completed + timedelta(days=interval_days)
-            # Hard fixed interval - for now, return a placeholder
-            # In real implementation, you'd store the initial start date
-            return current_time + timedelta(days=interval_days)
+            else:
+                # Hard fixed interval - placeholder implementation
+                return current_time + timedelta(days=interval_days)
 
-        if schedule_mode == SCHEDULE_FIXED_DATE:
-            # Implementation for fixed date (e.g., every January 15th)
-            # This would need more complex date parsing
-            pass
-
-        elif schedule_mode == SCHEDULE_FIXED_OCCURRENCE:
-            # Implementation for fixed occurrence (e.g., every Monday)
-            # This would need day-of-week parsing
-            pass
-
+        # TODO: Implement fixed date and fixed occurrence logic
         return None
 
     async def mark_task_complete(self, task_id: str) -> None:
@@ -170,10 +161,11 @@ class TaskButlerCoordinator(DataUpdateCoordinator):
         """Format a date according to user preference."""
         if self.date_format == "dd.mm.yyyy":
             return date.strftime("%d.%m.%Y")
-        if self.date_format == "dddd dd.mm.yyyy":
+        elif self.date_format == "dddd dd.mm.yyyy":
             return date.strftime("%A %d.%m.%Y")
-        if self.date_format == "mm/dd/yyyy":
+        elif self.date_format == "mm/dd/yyyy":
             return date.strftime("%m/%d/%Y")
-        if self.date_format == "dddd mm/dd/yyyy":
+        elif self.date_format == "dddd mm/dd/yyyy":
             return date.strftime("%A %m/%d/%Y")
-        return date.strftime("%d.%m.%Y")
+        else:
+            return date.strftime("%d.%m.%Y")

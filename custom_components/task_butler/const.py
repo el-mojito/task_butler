@@ -4,6 +4,10 @@ from __future__ import annotations
 
 from typing import Final
 
+VERSION = "1.0.0"
+NAME = "Task Butler"
+MANUFACTURER = "@el-mojito"
+
 DOMAIN: Final = "task_butler"
 
 # Config keys
@@ -43,7 +47,7 @@ INTERVAL_MODES: Final = [
 ]
 
 # Default values
-DEFAULT_DATE_FORMAT: Final = DATE_FORMAT_DD_MM_YYYY
+DEFAULT_DATE_FORMAT: Final = DATE_FORMAT_DDDD_DD_MM_YYYY
 DEFAULT_SCHEDULE_MODE: Final = SCHEDULE_FIXED_INTERVAL
 DEFAULT_INTERVAL_MODE: Final = INTERVAL_HARD_FIXED
 DEFAULT_INTERVAL_DAYS: Final = 30
@@ -59,5 +63,8 @@ PLATFORMS: Final = ["binary_sensor", "sensor"]
 
 # Panel constants
 PANEL_URL: Final = "task-butler"
-PANEL_TITLE: Final = "Task Butler"
+PANEL_TITLE: Final = NAME
 PANEL_ICON: Final = "mdi:clipboard-check"
+PANEL_NAME: Final = "task-butler-panel"
+PANEL_API_PATH: Final = "/task_butler_static"
+PANEL_API_URL: Final = PANEL_API_PATH + "/task-butler-panel.js"
