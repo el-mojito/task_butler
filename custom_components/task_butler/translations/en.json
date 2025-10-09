@@ -2,19 +2,13 @@
   "config": {
     "step": {
       "user": {
-        "title": "Add Task Butler Task",
-        "description": "Set up a new recurring task to track maintenance activities.",
+        "title": "Task Butler Setup",
+        "description": "Configure your Task Butler integration. This will set up a task management system with a custom panel accessible from the sidebar.",
         "data": {
-          "task_name": "Task Name",
-          "interval_days": "Interval (Days)",
-          "schedule_type": "Schedule Type",
-          "enabled": "Enabled"
+          "date_format": "Date Format"
         },
         "data_description": {
-          "task_name": "The name of the recurring task (e.g., 'Clean Water Filter')",
-          "interval_days": "How many days between task occurrences",
-          "schedule_type": "Fixed: repeats every X days regardless of completion. Completion-based: starts counting after task is marked complete.",
-          "enabled": "Whether this task is currently active"
+          "date_format": "Choose how dates are displayed throughout the Task Butler interface"
         }
       }
     },
@@ -24,18 +18,20 @@
       "unknown": "Unexpected error occurred"
     },
     "abort": {
-      "already_configured": "Task with this name is already configured"
+      "already_configured": "Task Butler is already configured",
+      "single_instance_allowed": "Only a single instance of Task Butler is allowed"
     }
   },
   "options": {
     "step": {
       "init": {
         "title": "Task Butler Options",
-        "description": "Configure options for this task.",
+        "description": "Configure how Task Butler displays information",
         "data": {
-          "interval_days": "Interval (Days)",
-          "schedule_type": "Schedule Type",
-          "enabled": "Enabled"
+          "date_format": "Date Format"
+        },
+        "data_description": {
+          "date_format": "Choose how dates are displayed in the Task Butler panel and entities"
         }
       }
     }

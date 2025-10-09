@@ -1,27 +1,63 @@
-"""Constants for the Task Butler integration."""
+"""Constants for Task Butler integration."""
 
-DOMAIN = "task_butler"
+from __future__ import annotations
 
-# Platforms
-PLATFORMS = ["binary_sensor", "sensor", "switch"]
+from typing import Final
 
-# Configuration keys
-CONF_TASK_NAME = "task_name"
-CONF_INTERVAL_DAYS = "interval_days"
-CONF_SCHEDULE_TYPE = "schedule_type"
-CONF_ENABLED = "enabled"
+DOMAIN: Final = "task_butler"
 
-# Schedule types
-SCHEDULE_FIXED = "fixed"
-SCHEDULE_COMPLETION_BASED = "completion_based"
+# Config keys
+CONF_DATE_FORMAT: Final = "date_format"
+
+# Date format options
+DATE_FORMAT_DD_MM_YYYY: Final = "dd.mm.yyyy"
+DATE_FORMAT_DDDD_DD_MM_YYYY: Final = "dddd dd.mm.yyyy"
+DATE_FORMAT_MM_DD_YYYY: Final = "mm/dd/yyyy"
+DATE_FORMAT_DDDD_MM_DD_YYYY: Final = "dddd mm/dd/yyyy"
+
+DATE_FORMATS: Final = [
+    DATE_FORMAT_DD_MM_YYYY,
+    DATE_FORMAT_DDDD_DD_MM_YYYY,
+    DATE_FORMAT_MM_DD_YYYY,
+    DATE_FORMAT_DDDD_MM_DD_YYYY,
+]
+
+# Task scheduling modes
+SCHEDULE_FIXED_DATE: Final = "fixed_date"
+SCHEDULE_FIXED_OCCURRENCE: Final = "fixed_occurrence"
+SCHEDULE_FIXED_INTERVAL: Final = "fixed_interval"
+
+SCHEDULE_MODES: Final = [
+    SCHEDULE_FIXED_DATE,
+    SCHEDULE_FIXED_OCCURRENCE,
+    SCHEDULE_FIXED_INTERVAL,
+]
+
+# Interval modes for fixed interval scheduling
+INTERVAL_HARD_FIXED: Final = "hard_fixed"
+INTERVAL_AFTER_COMPLETION: Final = "after_completion"
+
+INTERVAL_MODES: Final = [
+    INTERVAL_HARD_FIXED,
+    INTERVAL_AFTER_COMPLETION,
+]
 
 # Default values
-DEFAULT_INTERVAL_DAYS = 30
-DEFAULT_ENABLED = True
+DEFAULT_DATE_FORMAT: Final = DATE_FORMAT_DD_MM_YYYY
+DEFAULT_SCHEDULE_MODE: Final = SCHEDULE_FIXED_INTERVAL
+DEFAULT_INTERVAL_MODE: Final = INTERVAL_HARD_FIXED
+DEFAULT_INTERVAL_DAYS: Final = 30
 
-# Entity attributes
-ATTR_NEXT_DUE_DATE = "next_due_date"
-ATTR_DAYS_OVERDUE = "days_overdue"
-ATTR_LAST_COMPLETED = "last_completed"
-ATTR_SCHEDULE_TYPE = "schedule_type"
-ATTR_INTERVAL_DAYS = "interval_days"
+# Service names
+SERVICE_MARK_COMPLETE: Final = "mark_task_complete"
+SERVICE_CREATE_TASK: Final = "create_task"
+SERVICE_DELETE_TASK: Final = "delete_task"
+SERVICE_UPDATE_TASK: Final = "update_task"
+
+# Platforms
+PLATFORMS: Final = ["binary_sensor", "sensor"]
+
+# Panel constants
+PANEL_URL: Final = "task-butler"
+PANEL_TITLE: Final = "Task Butler"
+PANEL_ICON: Final = "mdi:clipboard-check"

@@ -1,13 +1,17 @@
 {
   "domain": "task_butler",
   "name": "Task Butler",
-  "codeowners": ["@el-mojito"],
+  "version": "1.0.0",
   "config_flow": true,
-  "dependencies": [],
   "documentation": "https://github.com/el-mojito/task-butler",
-  "integration_type": "service",
-  "iot_class": "local_push",
   "issue_tracker": "https://github.com/el-mojito/task-butler/issues",
   "requirements": [],
-  "version": "0.1.0"
+  "ssdp": [],
+  "zeroconf": [],
+  "homekit": {},
+  "dependencies": [],
+  "codeowners": ["@el-mojito"],
+  "iot_class": "local_push",
+  "integration_type": "service",
+  "quality_scale": "silver"
 }

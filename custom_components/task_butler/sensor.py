@@ -2,74 +2,123 @@
 
 from __future__ import annotations
 
+import logging
+from datetime import datetime
+from typing import Any
+
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
+from .coordinator import TaskButlerCoordinator
+
+_LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    config_entry: ConfigEntry,
+    entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up Task Butler sensors."""
-    # TODO: Create sensor entities based on config entry
-    entities = []
+    """Set up Task Butler sensors based on a config entry."""
+    coordinator: TaskButlerCoordinator = hass.data[DOMAIN]
 
-    # Example sensors
-    entities.extend(
-        [
-            TaskDaysRemainingSensor(config_entry),
-            TaskLastCompletedSensor(config_entry),
-        ]
-    )
+    @coordinator.async_add_listener
+    def _add_entities():
+        """Add entities when tasks are created."""
+        entities = []
+        for task_id in coordinator.tasks:
+            entities.extend(
+                [
+                    TaskNextDueSensor(coordinator, task_id),
+                    TaskLastCompletedSensor(coordinator, task_id),
+                ]
+            )
+        if entities:
+            async_add_entities(entities, True)
 
-    async_add_entities(entities)
+    # Add initial entities
+    _add_entities()
 
 
-class TaskDaysRemainingSensor(SensorEntity):
-    """Sensor showing days remaining until task is due."""
+class TaskNextDueSensor(CoordinatorEntity, SensorEntity):
+    """Sensor for task next due date."""
 
-    def __init__(self, config_entry: ConfigEntry) -> None:
+    def __init__(self, coordinator: TaskButlerCoordinator, task_id: str) -> None:
         """Initialize the sensor."""
-        self._config_entry = config_entry
-        task_name = config_entry.data.get("task_name", "Task")
-        self._attr_name = f"{task_name} Days Remaining"
-        self._attr_unique_id = f"{DOMAIN}_{config_entry.entry_id}_days_remaining"
-        self._attr_native_unit_of_measurement = "days"
-        self._attr_state_class = "measurement"
+        super().__init__(coordinator)
+        self.task_id = task_id
 
     @property
-    def native_value(self) -> int | None:
-        """Return the days remaining."""
-        # TODO: Implement days remaining calculation
-        return None
+    def task_data(self) -> dict[str, Any]:
+        """Get task data from coordinator."""
+        return self.coordinator.tasks.get(self.task_id, {})
 
-    async def async_update(self) -> None:
-        """Update the sensor."""
-        # TODO: Implement update logic
+    @property
+    def name(self) -> str:
+        """Return the name of the sensor."""
+        task_name = self.task_data.get("name", "Unknown Task")
+        return f"{task_name} Next Due"
 
-
-class TaskLastCompletedSensor(SensorEntity):
-    """Sensor showing when task was last completed."""
-
-    def __init__(self, config_entry: ConfigEntry) -> None:
-        """Initialize the sensor."""
-        self._config_entry = config_entry
-        task_name = config_entry.data.get("task_name", "Task")
-        self._attr_name = f"{task_name} Last Completed"
-        self._attr_unique_id = f"{DOMAIN}_{config_entry.entry_id}_last_completed"
-        self._attr_device_class = "timestamp"
+    @property
+    def unique_id(self) -> str:
+        """Return a unique ID."""
+        return f"{DOMAIN}_{self.task_id}_next_due"
 
     @property
     def native_value(self) -> str | None:
-        """Return the last completed timestamp."""
-        # TODO: Implement last completed logic
+        """Return the state of the sensor."""
+        next_due = self.task_data.get("next_due")
+        if next_due:
+            if isinstance(next_due, str):
+                next_due = datetime.fromisoformat(next_due)
+            return self.coordinator.format_date(next_due)
         return None
 
-    async def async_update(self) -> None:
-        """Update the sensor."""
-        # TODO: Implement update logic
+    @property
+    def available(self) -> bool:
+        """Return True if entity is available."""
+        return self.task_id in self.coordinator.tasks
+
+
+class TaskLastCompletedSensor(CoordinatorEntity, SensorEntity):
+    """Sensor for task last completed date."""
+
+    def __init__(self, coordinator: TaskButlerCoordinator, task_id: str) -> None:
+        """Initialize the sensor."""
+        super().__init__(coordinator)
+        self.task_id = task_id
+
+    @property
+    def task_data(self) -> dict[str, Any]:
+        """Get task data from coordinator."""
+        return self.coordinator.tasks.get(self.task_id, {})
+
+    @property
+    def name(self) -> str:
+        """Return the name of the sensor."""
+        task_name = self.task_data.get("name", "Unknown Task")
+        return f"{task_name} Last Completed"
+
+    @property
+    def unique_id(self) -> str:
+        """Return a unique ID."""
+        return f"{DOMAIN}_{self.task_id}_last_completed"
+
+    @property
+    def native_value(self) -> str | None:
+        """Return the state of the sensor."""
+        last_completed = self.task_data.get("last_completed")
+        if last_completed:
+            if isinstance(last_completed, str):
+                last_completed = datetime.fromisoformat(last_completed)
+            return self.coordinator.format_date(last_completed)
+        return None
+
+    @property
+    def available(self) -> bool:
+        """Return True if entity is available."""
+        return self.task_id in self.coordinator.tasks

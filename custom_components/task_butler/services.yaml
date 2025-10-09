@@ -2,31 +2,16 @@ mark_task_complete:
   name: Mark Task Complete
   description: Mark a task as completed
   fields:
-    entity_id:
-      name: Entity
-      description: The task entity to mark as complete
+    task_id:
+      name: Task ID
+      description: The ID of the task to mark as complete
       required: true
       selector:
-        entity:
-          domain: binary_sensor
-          integration: task_butler
+        text:
 
-reset_task:
-  name: Reset Task
-  description: Reset a task's schedule
-  fields:
-    entity_id:
-      name: Entity
-      description: The task entity to reset
-      required: true
-      selector:
-        entity:
-          domain: binary_sensor
-          integration: task_butler
-
-add_task:
-  name: Add Task
-  description: Add a new task
+create_task:
+  name: Create Task
+  description: Create a new task
   fields:
     name:
       name: Task Name
@@ -34,24 +19,122 @@ add_task:
       required: true
       selector:
         text:
-    interval_days:
-      name: Interval (Days)
-      description: Number of days between task occurrences
+    schedule_mode:
+      name: Schedule Mode
+      description: How the task is scheduled
       required: true
-      default: 30
+      selector:
+        select:
+          options:
+            - value: fixed_date
+              label: Fixed Date
+            - value: fixed_occurrence
+              label: Fixed Occurrence
+            - value: fixed_interval
+              label: Fixed Interval
+    interval_days:
+      name: Interval Days
+      description: Number of days for interval scheduling
       selector:
         number:
           min: 1
           max: 365
-    schedule_type:
-      name: Schedule Type
-      description: How the task schedule behaves
-      required: true
-      default: "fixed"
+          unit_of_measurement: days
+    interval_mode:
+      name: Interval Mode
+      description: How the interval is calculated
       selector:
         select:
           options:
-            - label: "Fixed Interval"
-              value: "fixed"
-            - label: "Completion Based"
-              value: "completion_based"
+            - value: hard_fixed
+              label: Hard Fixed
+            - value: after_completion
+              label: After Completion
+    fixed_date:
+      name: Fixed Date
+      description: Fixed date for scheduling (MM-DD format)
+      selector:
+        text:
+    fixed_occurrence:
+      name: Fixed Occurrence
+      description: Fixed occurrence description
+      selector:
+        text:
+    enabled:
+      name: Enabled
+      description: Whether the task is enabled
+      default: true
+      selector:
+        boolean:
+
+delete_task:
+  name: Delete Task
+  description: Delete a task
+  fields:
+    task_id:
+      name: Task ID
+      description: The ID of the task to delete
+      required: true
+      selector:
+        text:
+
+update_task:
+  name: Update Task
+  description: Update a task
+  fields:
+    task_id:
+      name: Task ID
+      description: The ID of the task to update
+      required: true
+      selector:
+        text:
+    name:
+      name: Task Name
+      description: New name of the task
+      selector:
+        text:
+    schedule_mode:
+      name: Schedule Mode
+      description: How the task is scheduled
+      selector:
+        select:
+          options:
+            - value: fixed_date
+              label: Fixed Date
+            - value: fixed_occurrence
+              label: Fixed Occurrence
+            - value: fixed_interval
+              label: Fixed Interval
+    interval_days:
+      name: Interval Days
+      description: Number of days for interval scheduling
+      selector:
+        number:
+          min: 1
+          max: 365
+          unit_of_measurement: days
+    interval_mode:
+      name: Interval Mode
+      description: How the interval is calculated
+      selector:
+        select:
+          options:
+            - value: hard_fixed
+              label: Hard Fixed
+            - value: after_completion
+              label: After Completion
+    fixed_date:
+      name: Fixed Date
+      description: Fixed date for scheduling (MM-DD format)
+      selector:
+        text:
+    fixed_occurrence:
+      name: Fixed Occurrence
+      description: Fixed occurrence description
+      selector:
+        text:
+    enabled:
+      name: Enabled
+      description: Whether the task is enabled
+      selector:
+        boolean:
