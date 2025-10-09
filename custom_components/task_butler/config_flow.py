@@ -6,22 +6,21 @@ import logging
 from typing import Any
 
 import voluptuous as vol
-
 from homeassistant import config_entries
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.exceptions import HomeAssistantError
 
 from .const import (
-    DOMAIN,
-    CONF_TASK_NAME,
+    CONF_ENABLED,
     CONF_INTERVAL_DAYS,
     CONF_SCHEDULE_TYPE,
-    CONF_ENABLED,
-    SCHEDULE_FIXED,
-    SCHEDULE_COMPLETION_BASED,
-    DEFAULT_INTERVAL_DAYS,
+    CONF_TASK_NAME,
     DEFAULT_ENABLED,
+    DEFAULT_INTERVAL_DAYS,
+    DOMAIN,
+    SCHEDULE_COMPLETION_BASED,
+    SCHEDULE_FIXED,
 )
 
 _LOGGER = logging.getLogger(__name__)

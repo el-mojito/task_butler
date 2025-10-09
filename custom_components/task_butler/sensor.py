@@ -51,7 +51,6 @@ class TaskDaysRemainingSensor(SensorEntity):
     async def async_update(self) -> None:
         """Update the sensor."""
         # TODO: Implement update logic
-        pass
 
 
 class TaskLastCompletedSensor(SensorEntity):
@@ -74,4 +73,3 @@ class TaskLastCompletedSensor(SensorEntity):
     async def async_update(self) -> None:
         """Update the sensor."""
         # TODO: Implement update logic
-        pass

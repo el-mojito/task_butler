@@ -50,4 +50,3 @@ class TaskDueBinarySensor(BinarySensorEntity):
     async def async_update(self) -> None:
         """Update the sensor."""
         # TODO: Implement update logic
-        pass

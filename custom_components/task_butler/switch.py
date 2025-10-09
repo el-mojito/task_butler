@@ -58,4 +58,3 @@ class TaskEnabledSwitch(SwitchEntity):
     async def async_update(self) -> None:
         """Update the switch."""
         # TODO: Implement update logic
-        pass

@@ -39,4 +39,3 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 async def _async_register_services(hass: HomeAssistant) -> None:
     """Register Task Butler services."""
     # TODO: Implement service registration
-    pass
