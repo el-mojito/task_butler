@@ -1,0 +1,10 @@
+{
+  "name": "Task Butler",
+  "homeassistant": "2025.9.0",
+  "hacs": "2.0.5",
+  "content_in_root": false,
+  "render_readme": true,
+  "zip_release": true,
+  "filename": "task_butler.zip",
+  "hide_default_branch": false
+}
