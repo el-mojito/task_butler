@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Final
 
-VERSION = "1.0.0"
+VERSION = "0.1.0"
 NAME = "Task Butler"
 MANUFACTURER = "@el-mojito"
 
