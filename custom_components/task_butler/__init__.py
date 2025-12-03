@@ -6,31 +6,30 @@ import logging
 import os
 from typing import Any
 
+import homeassistant.helpers.config_validation as cv
+import voluptuous as vol
+from homeassistant.components import websocket_api
+from homeassistant.components.http import StaticPathConfig
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.helpers.typing import ConfigType
-from homeassistant.components import websocket_api
-from homeassistant.components.http import StaticPathConfig
-import homeassistant.helpers.config_validation as cv
-import voluptuous as vol
 
 from .const import (
     DOMAIN,
-    PLATFORMS,
-    SERVICE_MARK_COMPLETE,
-    SERVICE_CREATE_TASK,
-    SERVICE_DELETE_TASK,
-    SERVICE_UPDATE_TASK,
-    PANEL_URL,
-    PANEL_TITLE,
+    INTERVAL_MODES,
+    PANEL_API_PATH,
     PANEL_ICON,
     PANEL_NAME,
-    PANEL_API_PATH,
+    PANEL_TITLE,
+    PANEL_URL,
+    PLATFORMS,
     SCHEDULE_MODES,
-    INTERVAL_MODES,
+    SERVICE_CREATE_TASK,
+    SERVICE_DELETE_TASK,
+    SERVICE_MARK_COMPLETE,
+    SERVICE_UPDATE_TASK,
 )
 from .coordinator import TaskButlerCoordinator
-
 from .panel import (
     async_register_panel,
     async_unregister_panel,

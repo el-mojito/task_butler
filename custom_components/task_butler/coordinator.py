@@ -2,24 +2,22 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta
 import logging
-from typing import Any
 import uuid
+from datetime import datetime, timedelta
+from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.storage import Store
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .const import (
-    DOMAIN,
-    SCHEDULE_FIXED_DATE,
-    SCHEDULE_FIXED_OCCURRENCE,
-    SCHEDULE_FIXED_INTERVAL,
-    INTERVAL_HARD_FIXED,
-    INTERVAL_AFTER_COMPLETION,
     DEFAULT_DATE_FORMAT,
+    DOMAIN,
+    INTERVAL_AFTER_COMPLETION,
+    INTERVAL_HARD_FIXED,
+    SCHEDULE_FIXED_INTERVAL,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -88,9 +86,8 @@ class TaskButlerCoordinator(DataUpdateCoordinator):
                 if isinstance(last_completed, str):
                     last_completed = datetime.fromisoformat(last_completed)
                 return last_completed + timedelta(days=interval_days)
-            else:
-                # Hard fixed interval - placeholder implementation
-                return current_time + timedelta(days=interval_days)
+            # Hard fixed interval - placeholder implementation
+            return current_time + timedelta(days=interval_days)
 
         # TODO: Implement fixed date and fixed occurrence logic
         return None
@@ -161,11 +158,10 @@ class TaskButlerCoordinator(DataUpdateCoordinator):
         """Format a date according to user preference."""
         if self.date_format == "dd.mm.yyyy":
             return date.strftime("%d.%m.%Y")
-        elif self.date_format == "dddd dd.mm.yyyy":
+        if self.date_format == "dddd dd.mm.yyyy":
             return date.strftime("%A %d.%m.%Y")
-        elif self.date_format == "mm/dd/yyyy":
+        if self.date_format == "mm/dd/yyyy":
             return date.strftime("%m/%d/%Y")
-        elif self.date_format == "dddd mm/dd/yyyy":
+        if self.date_format == "dddd mm/dd/yyyy":
             return date.strftime("%A %m/%d/%Y")
-        else:
-            return date.strftime("%d.%m.%Y")
+        return date.strftime("%d.%m.%Y")

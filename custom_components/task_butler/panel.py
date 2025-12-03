@@ -9,13 +9,12 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
 from .const import (
-    DOMAIN,
-    PANEL_URL,
-    PANEL_TITLE,
-    PANEL_ICON,
-    PANEL_NAME,
     PANEL_API_PATH,
     PANEL_API_URL,
+    PANEL_ICON,
+    PANEL_NAME,
+    PANEL_TITLE,
+    PANEL_URL,
 )
 
 _LOGGER = logging.getLogger(__name__)
