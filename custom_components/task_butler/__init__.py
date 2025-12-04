@@ -6,12 +6,13 @@ import logging
 import os
 from typing import Any
 
-import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
+
 from homeassistant.components import websocket_api
 from homeassistant.components.http import StaticPathConfig
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, ServiceCall
+import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.typing import ConfigType
 
 from .const import (
@@ -30,10 +31,7 @@ from .const import (
     SERVICE_UPDATE_TASK,
 )
 from .coordinator import TaskButlerCoordinator
-from .panel import (
-    async_register_panel,
-    async_unregister_panel,
-)
+from .panel import async_register_panel, async_unregister_panel
 
 _LOGGER = logging.getLogger(__name__)
 
