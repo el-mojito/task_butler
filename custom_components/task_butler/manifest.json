@@ -1,12 +1,12 @@
 {
-  "domain": "integration_blueprint",
-  "name": "Integration blueprint",
+  "domain": "task_butler",
+  "name": "Task Butler",
   "codeowners": [
-    "@ludeeus"
+    "@el-mojito"
   ],
   "config_flow": true,
-  "documentation": "https://github.com/ludeeus/integration_blueprint",
+  "documentation": "https://github.com/el-mojito/task_butler",
   "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/ludeeus/integration_blueprint/issues",
+  "issue_tracker": "https://github.com/el-mojito/task_butler/issues",
   "version": "0.1.0"
 }
