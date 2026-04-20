@@ -1,60 +1,67 @@
-"""Switch platform for Task Butler."""
+"""Switch platform for integration_blueprint."""
 
-# from __future__ import annotations
+from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from homeassistant.components.switch import SwitchEntity
-from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.components.switch import SwitchEntity, SwitchEntityDescription
 
-from .const import DOMAIN
+from .entity import IntegrationBlueprintEntity
+
+if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+
+    from .coordinator import BlueprintDataUpdateCoordinator
+    from .data import IntegrationBlueprintConfigEntry
+
+ENTITY_DESCRIPTIONS = (
+    SwitchEntityDescription(
+        key="integration_blueprint",
+        name="Integration Switch",
+        icon="mdi:format-quote-close",
+    ),
+)
 
 
 async def async_setup_entry(
-    hass: HomeAssistant,
-    config_entry: ConfigEntry,
+    hass: HomeAssistant,  # noqa: ARG001 Unused function argument: `hass`
+    entry: IntegrationBlueprintConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up Task Butler switches."""
-    # TODO: Create switch entities based on config entry
-    entities = []
+    """Set up the switch platform."""
+    async_add_entities(
+        IntegrationBlueprintSwitch(
+            coordinator=entry.runtime_data.coordinator,
+            entity_description=entity_description,
+        )
+        for entity_description in ENTITY_DESCRIPTIONS
+    )
 
-    # Example: Task enable/disable switch
-    entities.append(TaskEnabledSwitch(config_entry))
 
-    async_add_entities(entities)
+class IntegrationBlueprintSwitch(IntegrationBlueprintEntity, SwitchEntity):
+    """integration_blueprint switch class."""
 
-
-class TaskEnabledSwitch(SwitchEntity):
-    """Switch to enable/disable a task."""
-
-    def __init__(self, config_entry: ConfigEntry) -> None:
-        """Initialize the switch."""
-        self._config_entry = config_entry
-        task_name = config_entry.data.get("task_name", "Task")
-        self._attr_name = f"{task_name} Enabled"
-        self._attr_unique_id = f"{DOMAIN}_{config_entry.entry_id}_enabled"
-        self._is_on = config_entry.data.get("enabled", True)
+    def __init__(
+        self,
+        coordinator: BlueprintDataUpdateCoordinator,
+        entity_description: SwitchEntityDescription,
+    ) -> None:
+        """Initialize the switch class."""
+        super().__init__(coordinator)
+        self.entity_description = entity_description
 
     @property
     def is_on(self) -> bool:
-        """Return true if the task is enabled."""
-        return self._is_on
+        """Return true if the switch is on."""
+        return self.coordinator.data.get("title", "") == "foo"
 
-    async def async_turn_on(self, **kwargs: Any) -> None:
-        """Turn the switch on."""
-        # TODO: Implement enable logic
-        self._is_on = True
-        self.async_write_ha_state()
+    async def async_turn_on(self, **_: Any) -> None:
+        """Turn on the switch."""
+        await self.coordinator.config_entry.runtime_data.client.async_set_title("bar")
+        await self.coordinator.async_request_refresh()
 
-    async def async_turn_off(self, **kwargs: Any) -> None:
-        """Turn the switch off."""
-        # TODO: Implement disable logic
-        self._is_on = False
-        self.async_write_ha_state()
-
-    async def async_update(self) -> None:
-        """Update the switch."""
-        # TODO: Implement update logic
+    async def async_turn_off(self, **_: Any) -> None:
+        """Turn off the switch."""
+        await self.coordinator.config_entry.runtime_data.client.async_set_title("foo")
+        await self.coordinator.async_request_refresh()
