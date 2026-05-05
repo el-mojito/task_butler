@@ -1,6 +1,6 @@
 {
     "name": "el-mojito/task_butler",
-    "image": "mcr.microsoft.com/devcontainers/base:debian",
+    "image": "ghcr.io/home-assistant/devcontainer:5-apps",
     "postCreateCommand": "scripts/setup",
     "forwardPorts": [
         8123
