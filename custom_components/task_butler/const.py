@@ -2,7 +2,9 @@
 
 from logging import Logger, getLogger
 
+from homeassistant.util import dt as dt_util
+
 LOGGER: Logger = getLogger(__package__)
 
 DOMAIN = "task_butler"
-ATTRIBUTION = "Data provided by http://jsonplaceholder.typicode.com/"
+PLATFORMS = ["binary_sensor", "button"]

@@ -1,61 +1,30 @@
-"""Binary sensor platform for task_butler."""
+from homeassistant.components.binary_sensor import BinarySensorEntity
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
 
-from __future__ import annotations
-
-from typing import TYPE_CHECKING
-
-from homeassistant.components.binary_sensor import (
-    BinarySensorDeviceClass,
-    BinarySensorEntity,
-    BinarySensorEntityDescription,
-)
-
-from .entity import IntegrationBlueprintEntity
-
-if TYPE_CHECKING:
-    from homeassistant.core import HomeAssistant
-    from homeassistant.helpers.entity_platform import AddEntitiesCallback
-
-    from .coordinator import BlueprintDataUpdateCoordinator
-    from .data import IntegrationBlueprintConfigEntry
-
-ENTITY_DESCRIPTIONS = (
-    BinarySensorEntityDescription(
-        key="task_butler",
-        name="Task Butler Binary Sensor",
-        device_class=BinarySensorDeviceClass.CONNECTIVITY,
-    ),
-)
+from .const import DOMAIN
+from .coordinator import TaskButlerCoordinator
 
 
-async def async_setup_entry(
-    hass: HomeAssistant,  # noqa: ARG001 Unused function argument: `hass`
-    entry: IntegrationBlueprintConfigEntry,
-    async_add_entities: AddEntitiesCallback,
-) -> None:
-    """Set up the binary_sensor platform."""
-    async_add_entities(
-        IntegrationBlueprintBinarySensor(
-            coordinator=entry.runtime_data.coordinator,
-            entity_description=entity_description,
-        )
-        for entity_description in ENTITY_DESCRIPTIONS
-    )
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities):
+    coordinator: TaskButlerCoordinator = hass.data[DOMAIN][entry.entry_id]
+
+    entities = [
+        TaskDueSensor(coordinator, task_id)
+        for task_id in coordinator.data
+    ]
+
+    async_add_entities(entities)
 
 
-class IntegrationBlueprintBinarySensor(IntegrationBlueprintEntity, BinarySensorEntity):
-    """task_butler binary_sensor class."""
-
-    def __init__(
-        self,
-        coordinator: BlueprintDataUpdateCoordinator,
-        entity_description: BinarySensorEntityDescription,
-    ) -> None:
-        """Initialize the binary_sensor class."""
+class TaskDueSensor(CoordinatorEntity, BinarySensorEntity):
+    def __init__(self, coordinator: TaskButlerCoordinator, task_id: str):
         super().__init__(coordinator)
-        self.entity_description = entity_description
+        self._task_id = task_id
+        self._attr_unique_id = f"{task_id}_due"
+        self._attr_name = f"Task {task_id} Due"
 
     @property
-    def is_on(self) -> bool:
-        """Return true if the binary_sensor is on."""
-        return self.coordinator.data.get("title", "") == "foo"
+    def is_on(self):
+        return self.coordinator.data[self._task_id]["is_due"]
