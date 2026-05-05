@@ -1,4 +1,4 @@
-from homeassistant.components.binary_sensor import BinarySensorEntity
+from homeassistant.components.button import ButtonEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -11,20 +11,19 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     coordinator: TaskButlerCoordinator = hass.data[DOMAIN][entry.entry_id]
 
     entities = [
-        TaskDueSensor(coordinator, task_id)
+        TaskDoneButton(coordinator, task_id)
         for task_id in coordinator.data
     ]
 
     async_add_entities(entities)
 
 
-class TaskDueSensor(CoordinatorEntity, BinarySensorEntity):
+class TaskDoneButton(CoordinatorEntity, ButtonEntity):
     def __init__(self, coordinator: TaskButlerCoordinator, task_id: str):
         super().__init__(coordinator)
         self._task_id = task_id
-        self._attr_unique_id = f"{task_id}_due"
-        self._attr_name = f"Task {task_id} Due"
+        self._attr_unique_id = f"{task_id}_done"
+        self._attr_name = f"Mark {task_id} done"
 
-    @property
-    def is_on(self):
-        return self.coordinator.data[self._task_id]["is_due"]
+    async def async_press(self):
+        await self.coordinator.async_mark_done(self._task_id)

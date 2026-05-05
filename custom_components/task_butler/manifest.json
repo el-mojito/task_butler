@@ -2,20 +2,13 @@
   "domain": "task_butler",
   "name": "Task Butler",
   "version": "0.1.0",
+  "codeowners": [
+    "@el-mojito"
+  ],
   "config_flow": true,
-  "documentation": "https://github.com/el-mojito/task-butler",
-  "issue_tracker": "https://github.com/el-mojito/task-butler/issues",
   "requirements": [],
-  "after_dependencies": [
-    "frontend"
-  ],
-  "dependencies": [
-    "http",
-    "panel_custom",
-    "tag"
-  ],
-  "codeowners": ["@el-mojito"],
-  "iot_class": "local_push",
-  "integration_type": "service",
-  "frontend": true
+  "dependencies": [],
+  "iot_class": "local_polling",
+  "documentation": "https://github.com/el-mojito/task_butler",
+  "issue_tracker": "https://github.com/el-mojito/task_butler/issues"
 }
